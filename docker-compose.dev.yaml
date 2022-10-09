@@ -5,13 +5,15 @@ x-common-env-variables: &common-env-variables
 
 services:
   todo-nuxt:
-    image: rodarte/yc-nuxt3-todo-app-dev:0.0.3
+    image: rodarte/yc-nuxt3-todo-app-dev:2372adc
     environment:
       <<: *common-env-variables
       PORT: 3000
+      HMR_PORT: 3001
       HOST: 0.0.0.0
     ports:
       - '3000:3000'
+      - '3001:3001'
     volumes:
       - ./todo-nuxt3:/node/app
       - /node/app/node_modules
