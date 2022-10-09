@@ -1,4 +1,8 @@
 {
+  "name": "yc-nuxt3-todo-app",
+  "version": "0.0.1",
+  "description": "YouTube course Nuxt 3 Todo App",
+  "author": "Alejandro Rodarte",
   "private": true,
   "scripts": {
     "build": "nuxt build",
@@ -8,6 +12,6 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
-    "nuxt": "3.0.0-rc.11"
+    "nuxt": "^3.0.0-rc.11"
   }
 }
