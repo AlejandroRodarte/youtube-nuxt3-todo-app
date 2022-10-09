@@ -73,8 +73,9 @@ LABEL org.opencontainers.image.title "Development image for a simple todo applic
 # stage label for this image
 LABEL com.rodarte.yc.nuxt3.todoapp.stage dev
 
-# override node environment to development
+# override node environment to development and set hmr port
 ENV NODE_ENV development
+ENV HMR_PORT 3001
 
 # mkdir /node/app & workdir /node/app
 WORKDIR /node/app
@@ -87,6 +88,9 @@ RUN mkdir /node/app/.nuxt \
 
 # change to node user
 USER node
+
+# document hmr port
+EXPOSE 3001
 
 # run the nuxt development server
 CMD [ "nuxt", "dev" ]
