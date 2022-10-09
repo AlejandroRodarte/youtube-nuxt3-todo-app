@@ -1,0 +1,5 @@
+version: '3.4'
+
+services:
+  todo-nuxt:
+    image: rodarte/yc-nuxt3-todo-app-prod:latest

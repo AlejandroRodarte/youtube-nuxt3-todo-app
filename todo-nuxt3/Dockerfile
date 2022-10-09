@@ -16,10 +16,10 @@ LABEL com.rodarte.yc.nuxt3.todoapp.stage base
 ARG CREATED_DATE=not-set
 ARG SOURCE_COMMIT=not-set
 
-# environment variables: node environment, nuxt port/host, and nuxi (nuxt cli) version
+# environment variables: node environment and nuxt port/host
 ENV NODE_ENV production
-ENV NUXT_HOST 0.0.0.0
-ENV NUXT_PORT 3000
+ENV HOST 0.0.0.0
+ENV PORT 3000
 
 # install tini
 RUN apt-get update \
@@ -37,10 +37,9 @@ RUN chown -R node:node .
 # copy package-related files to /node (owned by node user)
 COPY --chown=node:node package.json package-lock.json ./
 
-# install prod dependencies and nuxt dev dependency (so `nuxt prepare` works)
-RUN npm install nuxt --save-dev \
-    && npm config list \
-    && npm ci --omit-dev \
+# install prod dependencies
+RUN npm config list \
+    && npm ci --omit=dev \
     && npm cache clean --force
 
 # document exposed port
@@ -60,7 +59,8 @@ LABEL com.rodarte.yc.nuxt3.todoapp.stage base-dev
 
 # install development dependencies
 RUN npm config list \
-    && npm ci --also=development \
+    && npm ci --include=dev \
+    && nuxt prepare \
     && npm cache clean --force
 
 
@@ -78,6 +78,12 @@ ENV NODE_ENV development
 
 # mkdir /node/app & workdir /node/app
 WORKDIR /node/app
+
+# /node/app/.nuxt and /node/node_module/.vite owned by node user (required by nuxt and vite)
+RUN mkdir /node/app/.nuxt \
+    && mkdir /node/node_modules/.vite \
+    && chown -R node:node /node/app/.nuxt \
+    && chown -R node:node /node/node_modules/.vite
 
 # change to node user
 USER node
@@ -122,9 +128,6 @@ LABEL org.opencontainers.image.title "Production image for a simple todo applica
 
 # stage label for this image
 LABEL com.rodarte.yc.nuxt3.todoapp.stage prod
-
-# uninstall nuxt dev dependency
-RUN npm uninstall nuxt --no-save
 
 # from build stage, copy /node/.output files (nuxt production-ready server code) to /node/.output in prod stage
 COPY --chown=node:node --from=build /node/.output ./.output

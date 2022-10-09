@@ -1,0 +1,14 @@
+version: '3.4'
+
+x-common-env-variables: &common-env-variables
+  STAGE: production-docker
+
+services:
+  todo-nuxt:
+    image: rodarte/yc-nuxt3-todo-app-prod:0.0.1
+    environment:
+      <<: *common-env-variables
+      PORT: 3000
+      HOST: 0.0.0.0
+    ports:
+      - '3000:3000'
