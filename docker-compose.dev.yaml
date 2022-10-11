@@ -11,6 +11,7 @@ services:
       PORT: 3000
       HMR_PORT: 3001
       HOST: 0.0.0.0
+      NUXT_PUBLIC_STAGE: development-docker
     ports:
       - '3000:3000'
       - '3001:3001'

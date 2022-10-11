@@ -34,38 +34,32 @@ WORKDIR /node
 # /node owned by node user
 RUN chown -R node:node .
 
-# copy package-related files to /node (owned by node user)
-COPY --chown=node:node package.json package-lock.json ./
-
-# install prod dependencies
-RUN npm config list \
-    && npm ci --omit=dev \
-    && npm cache clean --force
-
 # document exposed port
 EXPOSE 3000
 
 ENTRYPOINT [ "/usr/bin/tini", "--" ]
 
 
-# stage 2: base-dev image
-FROM base as base-dev
+# stage 2: dependencies image
+FROM base as dependencies
 
 # title label for this image
-LABEL org.opencontainers.image.title "Base development image for a simple todo application made with Nuxt 3 as part of a YouTube course"
+LABEL org.opencontainers.image.title "Dependencies image for a simple todo application made with Nuxt 3 as part of a YouTube course"
 
 # stage label for this image
-LABEL com.rodarte.yc.nuxt3.todoapp.stage base-dev
+LABEL com.rodarte.yc.nuxt3.todoapp.stage dependencies
 
-# install development dependencies
+# copy package-related files to /node (owned by node user)
+COPY --chown=node:node package.json package-lock.json ./
+
+# install all dependencies
 RUN npm config list \
     && npm ci --include=dev \
-    && nuxt prepare \
     && npm cache clean --force
 
 
 # stage 3: dev image
-FROM base-dev as dev
+FROM dependencies as dev
 
 # title label for this image
 LABEL org.opencontainers.image.title "Development image for a simple todo application made with Nuxt 3 as part of a YouTube course"
@@ -97,7 +91,7 @@ CMD [ "nuxt", "dev" ]
 
 
 # stage 4: source image
-FROM base-dev as source
+FROM dependencies as source
 
 # title label for this image
 LABEL org.opencontainers.image.title "Source image for a simple todo application made with Nuxt 3 as part of a YouTube course"
@@ -119,7 +113,8 @@ LABEL org.opencontainers.image.title "Build image for a simple todo application 
 LABEL com.rodarte.yc.nuxt3.todoapp.stage build
 
 # run nuxt build to generate production-ready server at .output/ dir
-RUN nuxt build
+RUN NUXT_PUBLIC_STAGE=APP_NUXT_PUBLIC_STAGE_VAR \
+    nuxt build
 
 
 # stage 7: prod image
