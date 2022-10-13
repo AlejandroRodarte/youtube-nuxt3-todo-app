@@ -5,7 +5,7 @@ const cacheDir =
 
 const hmrPort =
   process.env.STAGE === 'development-docker'
-    ? +process.env.HMR_PORT
+    ? +(process.env.HMR_PORT || '3001')
     : undefined;
 
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
@@ -15,7 +15,7 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      stage: process.env.NUXT_PUBLIC_STAGE,
+      stage: process.env.NUXT_PUBLIC_STAGE || 'development-local',
     },
   },
   vite: {
