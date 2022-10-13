@@ -1,5 +1,5 @@
 # stage 1: base image
-FROM node:18 as base
+FROM node:16-alpine as base
 
 # general labels (author email, image title/docker-hub-repo/github-repo and license)
 LABEL org.opencontainers.image.authors alejandrorodarte1@gmail.com
@@ -22,8 +22,7 @@ ENV HOST 0.0.0.0
 ENV PORT 3000
 
 # install tini
-RUN apt-get update \
-    && apt-get install tini
+RUN apk add --no-cache tini
 
 # add node_modules binaries to PATH environment variable
 ENV PATH /node/node_modules/.bin:$PATH
@@ -37,7 +36,7 @@ RUN chown -R node:node .
 # document exposed port
 EXPOSE 3000
 
-ENTRYPOINT [ "/usr/bin/tini", "--" ]
+ENTRYPOINT [ "/sbin/tini", "--" ]
 
 
 # stage 2: dependencies image
