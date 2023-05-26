@@ -1,7 +1,7 @@
 {
   "name": "yc-nuxt3-todo-app",
   "version": "0.0.1",
-  "description": "YouTube course Nuxt 3 Todo App",
+  "description": "YouTube course Nuxt 3 Todo App (with Pinia and TailwindCSS)",
   "author": "Alejandro Rodarte Mendoza",
   "private": true,
   "scripts": {
