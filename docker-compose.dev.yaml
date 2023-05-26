@@ -5,7 +5,7 @@ x-common-env-variables: &common-env-variables
 
 services:
   todo-nuxt:
-    image: rodarte/yc-nuxt3-todo-app-dev:db38842
+    image: rodarte/yc-nuxt3-todo-app-dev:98d0add
     environment:
       <<: *common-env-variables
       PORT: 3000
