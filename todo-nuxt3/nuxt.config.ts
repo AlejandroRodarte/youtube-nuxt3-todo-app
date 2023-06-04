@@ -9,6 +9,11 @@ export default defineNuxtConfig({
     enabled: true,
   },
   modules: ['@nuxtjs/tailwindcss', '@pinia/nuxt'],
+  nitro: {
+    externals: {
+      inline: ['uuid'],
+    },
+  },
   runtimeConfig: {
     public: {
       stage: process.env.NUXT_PUBLIC_STAGE || 'development-local',
