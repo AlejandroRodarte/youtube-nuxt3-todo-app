@@ -25,16 +25,15 @@ const actions: Actions = {
   },
 
   updateTodo(payload) {
-    this.items = this.items.map((todo) => {
-      if (todo.id === payload.selectedTodo.id) {
-        return {
-          ...todo,
-          ...payload.updates,
-          updatedAt: new Date(),
-        };
-      }
-      return todo;
-    });
+    const todoIndex = this.items.findIndex(
+      (todo) => todo.id === payload.selectedTodo.id
+    );
+    if (todoIndex === -1) return;
+    this.items[todoIndex] = {
+      ...this.items[todoIndex],
+      ...payload.updates,
+      updatedAt: new Date(),
+    };
   },
 };
 

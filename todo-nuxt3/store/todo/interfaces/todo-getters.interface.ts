@@ -1,6 +1,10 @@
 import Todo from './todo.interface';
+import { TodoState } from './todo-state.interface';
+import { PiniaGetterAdaptor } from '../../../types/pinia/pinia-getter-adaptor.type';
 
-export interface TodoGetters {
+interface TodoBasicGetters {
   getById: (id: string) => Todo | undefined;
   getOrderedTodos: Todo[];
 }
+
+export type TodoGetters = PiniaGetterAdaptor<TodoState, TodoBasicGetters>;

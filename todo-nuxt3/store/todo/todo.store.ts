@@ -6,7 +6,9 @@ import actions from './todo.actions';
 
 const useTodoStore = defineStore('todo', {
   state,
-  getters,
+  // avoid "index signature for type 'string' is missing" error
+  // hacky solution; maybe there's a better way?
+  getters: { ...getters },
   actions,
 });
 

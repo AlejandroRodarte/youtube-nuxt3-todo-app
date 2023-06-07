@@ -1,8 +1,6 @@
-import { Store } from 'pinia';
-
-export type PiniaGetterAdaptor<GettersType, StoreType extends Store> = {
-  [GetterKey in keyof GettersType]: (
-    this: StoreType,
-    state: StoreType['$state']
-  ) => GettersType[GetterKey];
+export type PiniaGetterAdaptor<
+  StateType extends Record<string, any>,
+  GetterType extends Record<string, any>
+> = {
+  [GetterKey in keyof GetterType]: (state: StateType) => GetterType[GetterKey];
 };

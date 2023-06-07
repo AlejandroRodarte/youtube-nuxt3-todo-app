@@ -1,16 +1,16 @@
-interface TodoAdd {
+export interface TodoAdd {
   newTodo: {
     title: string;
   }
 }
 
-interface TodoDelete {
+export interface TodoDelete {
   selectedTodo: {
     id: string;
   }
 }
 
-interface TodoUpdate {
+export interface TodoUpdate {
   selectedTodo: {
     id: string;
   },

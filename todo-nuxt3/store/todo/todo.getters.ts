@@ -1,8 +1,7 @@
-import { PiniaGetterAdaptor } from '../../types/pinia/pinia-getter-adaptor.type';
 import { TodoGetters } from './interfaces/todo-getters.interface';
 import { TodoStore } from './types/todo-store.type';
 
-type Getters = PiniaGetterAdaptor<TodoGetters, TodoStore>;
+type Getters = TodoGetters & ThisType<TodoStore>;
 
 const getters: Getters = {
   getById(state) {
@@ -10,9 +9,8 @@ const getters: Getters = {
   },
 
   getOrderedTodos(state) {
-    return state.items.sort(
-      (todoA, todoB) =>
-        todoA.createdAt.getMilliseconds() - todoB.createdAt.getMilliseconds()
+    return [...state.items].sort(
+      (todoA, todoB) => todoA.createdAt.getTime() - todoB.createdAt.getTime()
     );
   },
 };
