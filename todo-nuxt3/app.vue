@@ -4,23 +4,71 @@
       <h1 class="text-4xl text-gray-800">What are we doing today?</h1>
     </section>
     <section id="form">
-      <form
-        @submit.prevent=""
-        class="mx-auto mt-6 w-9/12 max-w-lg rounded-md bg-white px-12 py-5"
-      >
-        <div class="flex items-center space-x-4">
-          <input
-            type="text"
-            class="flex-1 rounded-md border border-blue-200 px-4 py-2 focus:border-blue-400 focus:outline-none"
-            placeholder="Add a todo"
-          />
-          <button
-            class="rounded-md border border-blue-200 px-2 py-2 transition-colors duration-200 hover:bg-blue-200"
-          >
-            Add Todo
-          </button>
-        </div>
-      </form>
+      <todo-form
+        v-model:form="todoFormData"
+        :error="todoFormError"
+        @save="onTodoFormSave"
+      ></todo-form>
     </section>
   </div>
 </template>
+
+<script lang="ts">
+import useTodoStore from './store/todo/todo.store';
+import { TodoForm } from './components/todo/interfaces/todo-form.interface';
+import { TodoAdd } from './store/todo/interfaces/todo-actions.interface';
+
+export default {
+  setup() {
+    // hidden variables from template: (1) store, (2) error timeout instance,
+    // and (3) initial todo form state
+    const todoStore = useTodoStore();
+    let todoFormErrorTimeoutId: NodeJS.Timeout | undefined = undefined;
+    const initialTodoFormState: TodoForm = {
+      title: '',
+    };
+
+    // local state: form data and error flag
+    const todoFormData = ref<TodoForm>(initialTodoFormState);
+    const todoFormError = ref(false);
+
+    // method 1: code to run when "save" event is emitted from <todo-form>
+    const onTodoFormSave = (): void => {
+      // if title is empty, set error flag
+      if (!todoFormData.value.title.length) {
+        todoFormError.value = true;
+        return;
+      }
+
+      // if title is fine, add todo item to list via pinia action
+      const addTodoPayload: TodoAdd = {
+        newTodo: todoFormData.value,
+      };
+      todoStore.addTodo(addTodoPayload);
+
+      // reset form to its initial state
+      todoFormData.value = initialTodoFormState;
+    };
+
+    // watch error flag
+    watch(todoFormError, (value: boolean) => {
+      // if there is an error timeout currently active, clear it
+      if (todoFormErrorTimeoutId) {
+        clearTimeout(todoFormErrorTimeoutId);
+        todoFormErrorTimeoutId = undefined;
+        return;
+      }
+
+      // if there is NOT an active error timeout, and the error flag is set,
+      // set timeout to clear the flag after three seconds
+      if (value) {
+        todoFormErrorTimeoutId = setTimeout(() => {
+          todoFormError.value = false;
+        }, 3000);
+      }
+    });
+
+    return { onTodoFormSave, todoFormData, todoFormError };
+  },
+};
+</script>

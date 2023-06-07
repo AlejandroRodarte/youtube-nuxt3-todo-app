@@ -60,7 +60,7 @@ describe('useTodoStore: actions', () => {
 
     const [savedTodo] = todoStore.items;
 
-    expect(savedTodo.id).toBeDefined();
+    expect(savedTodo.id).toEqual(expect.any(String));
     expect(savedTodo.title).toBe(addTodoPayload.newTodo.title);
   });
 
