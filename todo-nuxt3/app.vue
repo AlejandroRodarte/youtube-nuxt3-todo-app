@@ -8,7 +8,10 @@
         v-model:form="todoFormData"
         :error="todoFormError"
         @save="onTodoFormSave"
-      ></todo-form>
+      />
+    </section>
+    <section id="todo-list" class="mt-6" v-if="todoList.length > 0">
+      <todo-list :items="todoList" />
     </section>
   </div>
 </template>
@@ -31,6 +34,9 @@ export default {
     // local state: form data and error flag
     const todoFormData = ref<TodoForm>(initialTodoFormState);
     const todoFormError = ref(false);
+
+    // computed property 1: ordered todos from store
+    const todoList = computed(() => todoStore.getOrderedTodos);
 
     // method 1: code to run when "save" event is emitted from <todo-form>
     const onTodoFormSave = (): void => {
@@ -68,7 +74,12 @@ export default {
       }
     });
 
-    return { onTodoFormSave, todoFormData, todoFormError };
+    return {
+      onTodoFormSave,
+      todoFormData,
+      todoFormError,
+      todoList,
+    };
   },
 };
 </script>
