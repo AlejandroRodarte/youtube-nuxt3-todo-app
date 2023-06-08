@@ -32,8 +32,8 @@ export default {
     };
 
     // local state: form data and error flag
-    const todoFormData = ref<TodoForm>(initialTodoFormState);
-    const todoFormError = ref(false);
+    const todoFormData = useState('todo-form-data', () => initialTodoFormState);
+    const todoFormError = useState('todo-form-error', () => false);
 
     // computed property 1: ordered todos from store
     const todoList = computed(() => todoStore.getOrderedTodos);
