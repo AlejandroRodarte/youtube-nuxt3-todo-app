@@ -57,7 +57,7 @@ export default {
     };
 
     // watch error flag
-    watch(todoFormError, (value: boolean) => {
+    watch(todoFormError, (value) => {
       // if there is an error timeout currently active, clear it
       if (todoFormErrorTimeoutId) {
         clearTimeout(todoFormErrorTimeoutId);
