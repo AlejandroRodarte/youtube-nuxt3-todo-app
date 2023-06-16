@@ -17,9 +17,9 @@
 </template>
 
 <script lang="ts">
-import useTodoStore from './store/todo/todo.store';
-import { TodoForm } from './components/todo/interfaces/todo-form.interface';
-import { TodoAdd } from './store/todo/interfaces/todo-actions.interface';
+import useTodoStore from '../store/todo/todo.store';
+import { TodoForm } from '../components/todo/interfaces/todo-form.interface';
+import { TodoAdd } from '../store/todo/interfaces/todo-actions.interface';
 
 export default {
   setup() {
