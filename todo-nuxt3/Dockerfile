@@ -70,6 +70,10 @@ LABEL com.rodarte.yc.nuxt3.todoapp.stage dev
 ENV NODE_ENV development
 ENV HMR_PORT 3001
 
+# /node/.nuxt owned by node user (required by nuxt)
+RUN mkdir /node/.nuxt \
+    && chown -R node:node /node/.nuxt
+
 # change to node user
 USER node
 
