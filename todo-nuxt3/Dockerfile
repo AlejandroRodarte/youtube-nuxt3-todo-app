@@ -71,7 +71,8 @@ ENV NODE_ENV development
 ENV HMR_PORT 3001
 
 # /node/.nuxt owned by node user (required by nuxt)
-RUN mkdir /node/.nuxt \
+RUN rm -rf /node/.nuxt \
+    && mkdir /node/.nuxt \
     && chown -R node:node /node/.nuxt
 
 # change to node user

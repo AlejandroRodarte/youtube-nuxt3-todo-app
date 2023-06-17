@@ -5,7 +5,7 @@ x-common-env-variables: &common-env-variables
 
 services:
   todo-nuxt:
-    image: rodarte/yc-nuxt3-todo-app-dev:fa22260
+    image: rodarte/yc-nuxt3-todo-app-dev:8bf7b5d
     environment:
       <<: *common-env-variables
       PORT: 3000
@@ -16,5 +16,12 @@ services:
       - '3000:3000'
       - '3001:3001'
     volumes:
-      - ./todo-nuxt3:/node/app
-      - /node/app/node_modules
+      # nuxt source code (pages, components, store, etc.)
+      - ./todo-nuxt3/.nuxt:/node/.nuxt
+      - ./todo-nuxt3/src:/node/src
+      # config files
+      - ./todo-nuxt3/nuxt.config.ts:/node/nuxt.config.ts
+      - ./todo-nuxt3/package.json:/node/package.json
+      - ./todo-nuxt3/tailwind.config.js:/node/tailwind.config.js
+      - ./todo-nuxt3/tsconfig.json:/node/tsconfig.json
+      - ./todo-nuxt3/vite.config.ts:/node/vite.config.ts

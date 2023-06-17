@@ -9,14 +9,14 @@ import {
 } from 'vitest';
 import { v4 as uuid } from 'uuid';
 
-import useTodoStore from '../../store/todo/todo.store';
-import { TodoStore } from '../../store/todo/types/todo-store.type';
+import useTodoStore from '../../src/store/todo/todo.store';
+import { TodoStore } from '../../src/store/todo/types/todo-store.type';
 import {
   TodoAdd,
   TodoDelete,
   TodoUpdate,
-} from '../../store/todo/interfaces/todo-actions.interface';
-import Todo from '../../store/todo/interfaces/todo.interface';
+} from '../../src/store/todo/interfaces/todo-actions.interface';
+import Todo from '../../src/store/todo/interfaces/todo.interface';
 
 let todoStore: TodoStore;
 

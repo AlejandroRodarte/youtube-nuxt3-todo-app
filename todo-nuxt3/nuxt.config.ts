@@ -19,6 +19,7 @@ export default defineNuxtConfig({
       stage: process.env.NUXT_PUBLIC_STAGE || 'development-local',
     },
   },
+  srcDir: 'src/',
   typescript: {
     strict: true,
   },
