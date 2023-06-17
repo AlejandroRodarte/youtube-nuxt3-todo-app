@@ -70,17 +70,6 @@ LABEL com.rodarte.yc.nuxt3.todoapp.stage dev
 ENV NODE_ENV development
 ENV HMR_PORT 3001
 
-# mkdir /node/app & workdir /node/app
-WORKDIR /node/app
-
-# /node/app/.nuxt and /node/app/node_modules/.cache owned by node user (required by nuxt and vite)
-RUN mkdir /node/app/.nuxt \
-    && chown -R node:node /node/app/.nuxt \
-    && mkdir /node/app/node_modules \
-    && chown -R node:node /node/app/node_modules \
-    && mkdir /node/app/node_modules/.cache \
-    && chown -R node:node /node/app/node_modules/.cache
-
 # change to node user
 USER node
 
