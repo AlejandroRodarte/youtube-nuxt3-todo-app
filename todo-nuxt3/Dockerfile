@@ -73,10 +73,12 @@ ENV HMR_PORT 3001
 # mkdir /node/app & workdir /node/app
 WORKDIR /node/app
 
-# /node/.nuxt and /node/app/node_modules/.cache owned by node user (required by nuxt and vite)
-RUN rm -rf /node/.nuxt && \
-    mkdir /node/.nuxt \
+# /node/app/.nuxt and /node/app/node_modules/.cache owned by node user (required by nuxt and vite)
+RUN rm -rf /node/.nuxt \
+    && mkdir /node/.nuxt \
     && chown -R node:node /node/.nuxt \
+    && mkdir /node/app/.nuxt \
+    && chown -R node:node /node/app/.nuxt \
     && mkdir /node/app/node_modules \
     && chown -R node:node /node/app/node_modules \
     && mkdir /node/app/node_modules/.cache \
