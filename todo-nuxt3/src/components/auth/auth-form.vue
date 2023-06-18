@@ -39,17 +39,17 @@
         />
       </div>
       <!-- Submit Button, Error Text, and Sign-In/Sign-Up Toggle Container -->
-      <div class="flex flex-col items-center space-y-4">
+      <div class="flex flex-col items-center space-y-4 text-center">
         <button
           type="submit"
-          class="transition-color w-full rounded-sm bg-blue-400 py-4 text-white duration-200 hover:bg-cyan-400 disabled:cursor-not-allowed disabled:bg-gray-400"
+          class="w-full rounded-sm bg-blue-400 py-4 text-white transition-colors duration-200 hover:bg-cyan-400 disabled:cursor-not-allowed disabled:bg-gray-400"
           :disabled="loading"
           @click="onSubmit"
         >
           Authorize
         </button>
         <a
-          class="transition-color cursor-pointer text-sm underline duration-200 hover:text-gray-600"
+          class="cursor-pointer text-xs underline transition-colors duration-200 hover:text-gray-600 md:text-base"
           @click="onToggleClick"
           >{{ toggleText }}</a
         >
