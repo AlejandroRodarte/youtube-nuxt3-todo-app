@@ -3,3 +3,10 @@ version: '3.4'
 services:
   todo-nuxt:
     image: rodarte/yc-nuxt3-todo-app-prod:latest
+    environment:
+      MYSQL_URL_FILE_PATH: /run/secrets/todo_nuxt_mysql_url
+    secrets:
+      - todo_nuxt_mysql_url
+secrets:
+  todo_nuxt_mysql_url:
+    file: ./secrets/docker/todo-nuxt3/mysql-url.secret.txt

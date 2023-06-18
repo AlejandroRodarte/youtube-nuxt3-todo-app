@@ -1,3 +1,10 @@
+import setDockerSecrets from './src/lib/env/docker/set-docker-secrets.helper';
+
+if (
+  ['development-docker', 'production-docker'].includes(process.env.STAGE || '')
+)
+  setDockerSecrets();
+
 const hmrPort =
   process.env.STAGE === 'development-docker'
     ? +(process.env.HMR_PORT || '3001')
@@ -15,6 +22,7 @@ export default defineNuxtConfig({
     },
   },
   runtimeConfig: {
+    mySqlURL: process.env.MYSQL_URL,
     public: {
       stage: process.env.NUXT_PUBLIC_STAGE || 'development-local',
     },
