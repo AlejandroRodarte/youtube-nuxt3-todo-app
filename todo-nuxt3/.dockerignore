@@ -1,7 +1,9 @@
 .git/
 .nuxt/
 .output/
+coverage/
 node_modules/
+tests/
 .dockerignore
 .gitignore
 Dockerfile

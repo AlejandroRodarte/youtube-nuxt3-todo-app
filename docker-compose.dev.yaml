@@ -5,7 +5,7 @@ x-common-env-variables: &common-env-variables
 
 services:
   todo-nuxt:
-    image: rodarte/yc-nuxt3-todo-app-dev:f4c0ddf
+    image: rodarte/yc-nuxt3-todo-app-dev:71fc708	
     environment:
       <<: *common-env-variables
       PORT: 3000
@@ -16,10 +16,13 @@ services:
       - '3000:3000'
       - '3001:3001'
     volumes:
-      # nuxt source code (pages, components, store, etc.)
+      # nuxt types are generated on-the-fly when we run "nuxt dev" and
+      # are stores at /node/.nuxt; if we want full nuxt typescript support
+      # in our host's VS Code instance, we need this volume binding
       - ./todo-nuxt3/.nuxt:/node/.nuxt
+      # nuxt source code (pages, components, store, etc.)
       - ./todo-nuxt3/src:/node/src
-      # config files
+      # config files (not all may be really needed)
       - ./todo-nuxt3/nuxt.config.ts:/node/nuxt.config.ts
       - ./todo-nuxt3/package.json:/node/package.json
       - ./todo-nuxt3/tailwind.config.js:/node/tailwind.config.js
