@@ -5,6 +5,7 @@ node_modules
 .cache
 .output
 .env
+.env.test
 dist
 
 # @vitest/coverage-c8 files

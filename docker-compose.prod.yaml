@@ -5,11 +5,13 @@ x-common-env-variables: &common-env-variables
 
 services:
   todo-nuxt:
-    image: rodarte/yc-nuxt3-todo-app-prod:fa22260
+    image: rodarte/yc-nuxt3-todo-app-prod:853b467
     environment:
       <<: *common-env-variables
       PORT: 3000
       HOST: 0.0.0.0
       NUXT_PUBLIC_STAGE: production-docker
+      JWT_EXPIRATION_NUMBER: 7
+      JWT_EXPIRATION_PERIOD: days
     ports:
       - '3000:3000'

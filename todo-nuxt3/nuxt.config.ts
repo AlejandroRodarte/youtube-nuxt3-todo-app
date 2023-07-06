@@ -23,6 +23,14 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     mySqlURL: process.env.MYSQL_URL,
+    hasherRounds: process.env.HASHER_ROUNDS,
+    jwt: {
+      key: process.env.JWT_KEY,
+      expiration: {
+        number: process.env.JWT_EXPIRATION_NUMBER,
+        period: process.env.JWT_EXPIRATION_PERIOD,
+      },
+    },
     public: {
       stage: process.env.NUXT_PUBLIC_STAGE || 'development-local',
     },
