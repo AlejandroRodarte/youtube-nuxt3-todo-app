@@ -33,6 +33,12 @@ WORKDIR /node
 # /node owned by node user
 RUN chown -R node:node .
 
+# copy prisma-related code
+COPY --chown=node:node ./prisma /node/prisma
+
+# generate node_modules/.prisma (required for prisma client to work)
+RUN npx prisma generate
+
 # document exposed port
 EXPOSE 3000
 
