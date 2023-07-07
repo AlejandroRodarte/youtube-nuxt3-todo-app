@@ -6,7 +6,14 @@ class PrismaClient {
   private _client?: Prisma.PrismaClient;
 
   connect(): void {
-    if (!this._client) this._client = new Prisma.PrismaClient();
+    if (!this._client)
+      this._client = new Prisma.PrismaClient({
+        datasources: {
+          db: {
+            url: process.env.MYSQL_URL!,
+          },
+        },
+      });
   }
 
   async disconnect(): Promise<Error | undefined> {

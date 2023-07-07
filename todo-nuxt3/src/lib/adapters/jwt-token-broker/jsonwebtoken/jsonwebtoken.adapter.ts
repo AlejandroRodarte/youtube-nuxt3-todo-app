@@ -1,4 +1,4 @@
-import { sign, verify } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 
 import { JwtTokenBrokerAdapter } from '../interfaces/jwt-token-broker-adapter.interface';
 import { CreateOptions } from '../interfaces/create-options.interface';
@@ -13,7 +13,7 @@ export class JsonWebTokenAdapter implements JwtTokenBrokerAdapter {
   create<T extends string | object | Buffer>(
     options: CreateOptions<T>
   ): string {
-    const token = sign(options.payload, this._key, {
+    const token = jwt.sign(options.payload, this._key, {
       expiresIn: this._expiresIn,
     });
     return token;
@@ -35,7 +35,7 @@ export class JsonWebTokenAdapter implements JwtTokenBrokerAdapter {
 
   check<T>(options: CheckOptions): T | undefined {
     try {
-      const decodedToken = verify(options.token, this._key);
+      const decodedToken = jwt.verify(options.token, this._key);
       return decodedToken as T;
     } catch (e) {
       return undefined;
