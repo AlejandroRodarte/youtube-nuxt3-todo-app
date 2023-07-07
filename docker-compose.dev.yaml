@@ -6,6 +6,7 @@ x-common-env-variables: &common-env-variables
 services:
   todo-nuxt:
     image: rodarte/yc-nuxt3-todo-app-dev:853b467
+    command: sh -c "npx prisma generate && nuxt dev"
     environment:
       <<: *common-env-variables
       PORT: 3000
@@ -22,6 +23,8 @@ services:
       # are stores at /node/.nuxt; if we want full nuxt typescript support
       # in our host's VS Code instance, we need this volume binding
       - ./todo-nuxt3/.nuxt:/node/.nuxt
+      # prisma-related code
+      - ./todo-nuxt3/prisma:/node/prisma
       # nuxt source code (pages, components, store, etc.)
       - ./todo-nuxt3/src:/node/src
       # config files (not all may be really needed)

@@ -33,12 +33,6 @@ WORKDIR /node
 # /node owned by node user
 RUN chown -R node:node .
 
-# copy prisma-related code
-COPY --chown=node:node ./prisma /node/prisma
-
-# generate node_modules/.prisma (required for prisma client to work)
-RUN npx prisma generate
-
 # document exposed port
 EXPOSE 3000
 
@@ -107,6 +101,9 @@ LABEL org.opencontainers.image.title "Build image for a simple todo application 
 
 # stage label for this image
 LABEL com.rodarte.yc.nuxt3.todoapp.stage build
+
+# generate node_modules/.prisma (required for prisma client to work)
+RUN npx prisma generate
 
 # run nuxt build to generate production-ready server at .output/ dir
 RUN NUXT_PUBLIC_STAGE=APP_NUXT_PUBLIC_STAGE_VAR \
