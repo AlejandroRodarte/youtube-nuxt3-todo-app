@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts" setup>
-import Todo from '../../store/todo/interfaces/todo.interface';
+import { Todo } from '../../store/todo/interfaces/todo.interface';
 
 const props = defineProps<{
   items: Todo[];

@@ -16,7 +16,7 @@ import {
   TodoDelete,
   TodoUpdate,
 } from '../../src/store/todo/interfaces/todo-actions.interface';
-import Todo from '../../src/store/todo/interfaces/todo.interface';
+import { Todo } from '../../src/store/todo/interfaces/todo.interface';
 
 let todoStore: TodoStore;
 

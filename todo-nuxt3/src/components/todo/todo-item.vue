@@ -42,7 +42,7 @@
 <script lang="ts" setup>
 import { XCircleIcon, CheckCircleIcon } from '@heroicons/vue/24/outline';
 
-import Todo from '../../store/todo/interfaces/todo.interface';
+import { Todo } from '../../store/todo/interfaces/todo.interface';
 import useTodoStore from '../../store/todo/todo.store';
 import {
   TodoDelete,
