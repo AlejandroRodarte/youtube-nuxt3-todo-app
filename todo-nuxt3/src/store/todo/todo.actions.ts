@@ -1,6 +1,6 @@
 import { v4 as uuid } from 'uuid';
 
-import Todo from './interfaces/todo.interface';
+import { Todo } from './interfaces/todo.interface';
 import { TodoActions } from './interfaces/todo-actions.interface';
 import { TodoStore } from './types/todo-store.type';
 

@@ -1,4 +1,4 @@
-import Todo from './todo.interface';
+import { Todo } from './todo.interface';
 import { TodoState } from './todo-state.interface';
 import { PiniaGetterAdaptor } from '../../../types/pinia/pinia-getter-adaptor.type';
 
