@@ -16,6 +16,7 @@
           placeholder="Email Address"
           size="1"
           class="w-full rounded-md border border-blue-200 px-4 py-2 focus:border-blue-400 focus:outline-none"
+          :value="props.form.email"
           @input="onInputChange"
         />
         <input
@@ -25,6 +26,7 @@
           placeholder="Password"
           size="1"
           class="w-full rounded-md border border-blue-200 px-4 py-2 focus:border-blue-400 focus:outline-none"
+          :value="props.form.password"
           @input="onInputChange"
         />
         <input
@@ -35,6 +37,7 @@
           placeholder="Confirm Password"
           size="1"
           class="w-full rounded-md border border-blue-200 px-4 py-2 focus:border-blue-400 focus:outline-none"
+          :value="props.form.confirmPassword"
           @input="onInputChange"
         />
       </div>
@@ -62,16 +65,19 @@
 <script lang="ts" setup>
 import { AuthForm } from './interfaces/auth-form.interface';
 import { AuthSignModes } from './types/auth-sign-modes.type';
+import { AuthFormAction } from './types/auth-form-action.type';
 
 const props = defineProps<{
   form: AuthForm;
   loading: boolean;
   error: string;
+  action?: AuthFormAction;
 }>();
 
 const emit = defineEmits<{
   submit: [mode: AuthSignModes];
   'update:form': [form: AuthForm];
+  'action-done': [];
 }>();
 
 // names for the HTML inputs of the auth form
@@ -128,4 +134,21 @@ const onInputChange = (e: Event) => {
 const onSubmit = () => {
   emit('submit', authSignMode.value);
 };
+
+// watcher 1: react to changes in props.action
+watch(
+  () => props.action,
+  (newAction) => {
+    // execute specific task pertaining to the action
+    switch (newAction) {
+      case 'toggle-sign-in':
+        authSignMode.value = 'sign-in';
+        break;
+      default:
+        break;
+    }
+    // after task is done, emit "action-done" event
+    emit('action-done');
+  }
+);
 </script>
