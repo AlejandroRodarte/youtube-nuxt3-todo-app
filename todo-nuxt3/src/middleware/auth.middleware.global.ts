@@ -3,7 +3,7 @@ const ALLOWED_ROUTES = ['/auth'] as const;
 
 export default defineNuxtRouteMiddleware(async (to) => {
   // is route "/auth"?
-  const isRouteAllowed = ALLOWED_ROUTES.some((route) => route === to.fullPath);
+  const isRouteAllowed = ALLOWED_ROUTES.some((route) => route === to.path);
 
   // user has app cookie?
   const cookie = useCookie('nuxt3-todo-token');

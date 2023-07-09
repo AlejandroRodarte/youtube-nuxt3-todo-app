@@ -25,7 +25,6 @@ export class JsonWebTokenAdapter implements JwtTokenBrokerAdapter {
       minutes: 'm',
       hours: 'h',
       days: 'd',
-      weeks: 'w',
       years: 'y',
     };
 
