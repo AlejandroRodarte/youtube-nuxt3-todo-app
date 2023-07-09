@@ -16,6 +16,7 @@ import { JwtTokenBrokerAdapter } from '../../../lib/adapters/jwt-token-broker/in
 import { jsonWebTokenAdapter } from '../../../lib/adapters/jwt-token-broker/jsonwebtoken/jsonwebtoken.adapter';
 import { UserTokenPayload } from './interfaces/user-token-payload.interface';
 import { ValidationErrorItem } from '../../../types/joi/validation-error-item.type';
+import { DecodedToken } from '../../../types/jsonwebtoken/decoded-token.type';
 
 export class UsersService {
   constructor(
@@ -90,6 +91,14 @@ export class UsersService {
     });
 
     return [token, undefined];
+  }
+
+  getUserPayloadFromToken(token: string): UserTokenPayload | undefined {
+    const decodedToken = this.jwtTokenBroker.check<
+      DecodedToken<UserTokenPayload>
+    >({ token });
+    if (!decodedToken) return undefined;
+    else return { id: decodedToken.id, email: decodedToken.email };
   }
 }
 

@@ -127,4 +127,43 @@ describe('UsersService: methods', () => {
       });
     });
   });
+
+  describe('getUserPayloadFromToken()', () => {
+    describe('Un-persistent branches', () => {
+      test('Should return undefined if token is faulty or expired', () => {
+        const expiredToken =
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU2ODFjN2RjLTFlM2EtNGFhZi1iYTI0LWExNWRlMzk3ZTMyMyIsImVtYWlsIjoiZm9vQGJhci5jb20iLCJpYXQiOjE2ODg2Njg0MzgsImV4cCI6MTY4ODY2ODQ0MH0.mZUaGhHlfN05B8crswqIvi2SV2UCLf_QIu-Cue3iXxg';
+
+        const user = usersService.getUserPayloadFromToken(expiredToken);
+        expect(user).toBeUndefined();
+      });
+    });
+
+    describe('Persistent branches', () => {
+      beforeAll(async () => {
+        const user: AddNewUserOptions = {
+          email: 'foo@bar.com',
+          password: 'correct-password',
+          confirmPassword: 'correct-password',
+        };
+        await usersService.addNewUser(user);
+      });
+
+      afterAll(async () => {
+        await teardownDatabase();
+      });
+
+      test('Should return user payload if token is verified', async () => {
+        const credentials = {
+          email: 'foo@bar.com',
+          password: 'correct-password',
+        };
+
+        const [token] = await usersService.loginUser(credentials);
+        const user = usersService.getUserPayloadFromToken(token!);
+
+        expect(user?.email).toBe(credentials.email);
+      });
+    });
+  });
 });
