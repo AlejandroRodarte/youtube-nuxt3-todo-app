@@ -1,4 +1,4 @@
-import { DataErrorTuple } from '../../../types/tuples/data-error.tuple.type';
+import { DataErrorTuple } from '../../types/tuples/data-error.tuple.type';
 
 export const asyncWrapper = async <Returns>(
   tryFn: () => Promise<Returns>,

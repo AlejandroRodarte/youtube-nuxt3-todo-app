@@ -9,14 +9,14 @@ import addNewUserOptionsSchema from '../../../lib/object-validation/joi/schemas/
 import prismaClient from '../../db/prisma/prisma-client.singleton';
 import { AddNewUserOptions } from './interfaces/add-new-user-options.interface';
 import { LoginUserOptions } from './interfaces/login-user-options.interface';
-import { DataErrorTuple } from '../../../types/tuples/data-error.tuple.type';
+import { DataErrorTuple } from '../../types/tuples/data-error.tuple.type';
 import { asyncWrapper } from '../../../lib/helpers/wrappers/async.wrapper';
 import loginUserOptionsSchema from '../../../lib/object-validation/joi/schemas/users/login-user-options.schema';
 import { JwtTokenBrokerAdapter } from '../../../lib/adapters/jwt-token-broker/interfaces/jwt-token-broker-adapter.interface';
 import { jsonWebTokenAdapter } from '../../../lib/adapters/jwt-token-broker/jsonwebtoken/jsonwebtoken.adapter';
 import { UserTokenPayload } from './interfaces/user-token-payload.interface';
-import { ValidationErrorItem } from '../../../types/joi/validation-error-item.type';
-import { DecodedToken } from '../../../types/jsonwebtoken/decoded-token.type';
+import { ValidationErrorItem } from '../../types/joi/validation-error-item.type';
+import { DecodedToken } from '../../types/jsonwebtoken/decoded-token.type';
 
 export class UsersService {
   constructor(

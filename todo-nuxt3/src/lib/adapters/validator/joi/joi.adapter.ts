@@ -1,7 +1,7 @@
 import { ValidateOptions } from '../interfaces/validate-options.interface';
 import { ValidatorAdapter } from '../interfaces/validator-adapter.interface';
-import { ValidationErrorItem } from '../../../../types/joi/validation-error-item.type';
-import { DataErrorTuple } from '../../../..//types/tuples/data-error.tuple.type';
+import { ValidationErrorItem } from '../../../types/joi/validation-error-item.type';
+import { DataErrorTuple } from '../../../types/tuples/data-error.tuple.type';
 
 export class JoiAdapter implements ValidatorAdapter {
   validate<T>(

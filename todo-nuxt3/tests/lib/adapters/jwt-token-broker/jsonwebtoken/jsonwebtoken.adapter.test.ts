@@ -3,7 +3,7 @@ import { v4 as uuid } from 'uuid';
 
 import { JsonWebTokenAdapter } from '../../../../../src/lib/adapters/jwt-token-broker/jsonwebtoken/jsonwebtoken.adapter';
 import { UserTokenPayload } from '../../../../../src/lib/services/users/interfaces/user-token-payload.interface';
-import { DecodedToken } from '../../../../../src/types/jsonwebtoken/decoded-token.type';
+import { DecodedToken } from '../../../../../src/lib/types/jsonwebtoken/decoded-token.type';
 
 const jsonWebTokenAdapter = new JsonWebTokenAdapter();
 

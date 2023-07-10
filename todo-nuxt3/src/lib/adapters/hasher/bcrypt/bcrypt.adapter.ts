@@ -4,7 +4,7 @@ import { HashOptions } from '../interfaces/hash-options.interface';
 import { HasherAdapter } from '../interfaces/hasher-adapter.interface';
 import { CompareOptions } from '../interfaces/compare-options.interface';
 import { asyncWrapper } from '../../../../lib/helpers/wrappers/async.wrapper';
-import { DataErrorTuple } from '../../../../types/tuples/data-error.tuple.type';
+import { DataErrorTuple } from '../../../types/tuples/data-error.tuple.type';
 
 export class BCryptAdapter implements HasherAdapter {
   async hash(options: HashOptions): Promise<DataErrorTuple<string, Error>> {
