@@ -1,5 +1,14 @@
 <template>
   <div class="min-h-screen w-full bg-gray-100">
+    <section id="navbar">
+      <nav class="flex justify-center pt-5">
+        <a
+          class="cursor-pointer whitespace-nowrap rounded-md border border-blue-200 px-2 py-2 transition-colors duration-200 hover:bg-blue-200"
+          @click="onLogout"
+          >Logout</a
+        >
+      </nav>
+    </section>
     <section id="heading" class="pt-7 text-center">
       <h1 class="text-4xl text-gray-800">What are we doing today?</h1>
     </section>
@@ -23,6 +32,8 @@ import { TodoAdd } from '../store/todo/interfaces/todo-actions.interface';
 
 export default {
   setup() {
+    const router = useRouter();
+
     // hidden variables from template: (1) store, (2) error timeout instance,
     // and (3) initial todo form state
     const todoStore = useTodoStore();
@@ -56,6 +67,14 @@ export default {
       todoFormData.value = initialTodoFormState;
     };
 
+    const onLogout = () => {
+      const cookie = useCookie('nuxt3-todo-token');
+      if (cookie.value) {
+        cookie.value = null;
+        router.replace('/auth');
+      }
+    };
+
     // watch error flag
     watch(todoFormError, (value) => {
       // if there is an error timeout currently active, clear it
@@ -76,6 +95,7 @@ export default {
 
     return {
       onTodoFormSave,
+      onLogout,
       todoFormData,
       todoFormError,
       todoList,
