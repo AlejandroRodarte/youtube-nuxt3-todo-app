@@ -1,4 +1,4 @@
-import { describe, expect, test, afterEach, beforeAll, afterAll } from 'vitest';
+import { describe, expect, test, afterEach, beforeEach } from 'vitest';
 
 import { UsersService } from '../../../../src/lib/services/users/users.service';
 import { joiAdapter } from '../../../../src/lib/adapters/validator/joi/joi.adapter';
@@ -90,7 +90,7 @@ describe('UsersService: methods', () => {
     });
 
     describe('Persistent branches', () => {
-      beforeAll(async () => {
+      beforeEach(async () => {
         const user: AddNewUserOptions = {
           email: 'foo@bar.com',
           password: 'correct-password',
@@ -99,7 +99,7 @@ describe('UsersService: methods', () => {
         await usersService.addNewUser(user);
       });
 
-      afterAll(async () => {
+      afterEach(async () => {
         await teardownDatabase();
       });
 
@@ -140,7 +140,7 @@ describe('UsersService: methods', () => {
     });
 
     describe('Persistent branches', () => {
-      beforeAll(async () => {
+      beforeEach(async () => {
         const user: AddNewUserOptions = {
           email: 'foo@bar.com',
           password: 'correct-password',
@@ -149,7 +149,7 @@ describe('UsersService: methods', () => {
         await usersService.addNewUser(user);
       });
 
-      afterAll(async () => {
+      afterEach(async () => {
         await teardownDatabase();
       });
 

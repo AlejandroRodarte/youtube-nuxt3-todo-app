@@ -13,4 +13,4 @@ export const setup = async () => {
 export const teardown = async () => {
   await teardownDatabase();
   await prismaClient.disconnect();
-}
+};
