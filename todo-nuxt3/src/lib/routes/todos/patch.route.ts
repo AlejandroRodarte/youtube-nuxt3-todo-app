@@ -7,7 +7,8 @@ import { todosService } from '../../../lib/services/todos/todos.service';
 const handler = async (
   event: H3WithUserContext
 ): Promise<TodosPatchResponse> => {
-  await checkUserContext(event);
+  const authError = checkUserContext(event);
+  if (authError) return { data: undefined, error: authError };
 
   const body = (await readBody(event)) as Omit<UpdateTodoOptions, 'ownerId'>;
   const [updatedTodo, error] = await todosService.updateTodo({

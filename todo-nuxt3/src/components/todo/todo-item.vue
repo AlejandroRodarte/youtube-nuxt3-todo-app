@@ -43,17 +43,16 @@
 import { XCircleIcon, CheckCircleIcon } from '@heroicons/vue/24/outline';
 
 import { Todo } from '../../store/todo/interfaces/todo.interface';
-import useTodoStore from '../../store/todo/todo.store';
-import {
-  TodoDelete,
-  TodoUpdate,
-} from '../../store/todo/interfaces/todo-actions.interface';
+import { UpdateEmitPayload } from './interfaces/update-emit-payload.interface';
 
 const props = defineProps<{
   todo: Todo;
 }>();
 
-const todoStore = useTodoStore();
+const emit = defineEmits<{
+  update: [payload: UpdateEmitPayload];
+  delete: [id: string];
+}>();
 
 const date = computed(() =>
   new Intl.DateTimeFormat('en-US').format(new Date(props.todo.createdAt))
@@ -63,26 +62,11 @@ const doneButtonLabel = computed(() =>
   props.todo.done ? 'Mark as undone' : 'Mark as done'
 );
 
-const onDelete = () => {
-  const todoId = props.todo.id;
-  const deleteTodoPayload: TodoDelete = {
-    selectedTodo: {
-      id: todoId,
-    },
-  };
-  todoStore.deleteTodo(deleteTodoPayload);
-};
+const onDelete = () => emit('delete', props.todo.id);
 
-const onDoneToggle = () => {
-  const todoId = props.todo.id;
-  const updateTodoPayload: TodoUpdate = {
-    selectedTodo: {
-      id: todoId,
-    },
-    updates: {
-      done: !props.todo.done,
-    },
-  };
-  todoStore.updateTodo(updateTodoPayload);
-};
+const onDoneToggle = () =>
+  emit('update', {
+    id: props.todo.id,
+    done: !props.todo.done,
+  });
 </script>

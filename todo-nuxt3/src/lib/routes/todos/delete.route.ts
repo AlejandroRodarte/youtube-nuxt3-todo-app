@@ -6,7 +6,8 @@ import { todosService } from '../../../lib/services/todos/todos.service';
 const handler = async (
   event: H3WithUserContext
 ): Promise<TodosDeleteResponse> => {
-  await checkUserContext(event);
+  const authError = checkUserContext(event);
+  if (authError) return { data: undefined, error: authError };
 
   const body = (await readBody(event)) as { id: string };
   const error = await todosService.deleteTodo({

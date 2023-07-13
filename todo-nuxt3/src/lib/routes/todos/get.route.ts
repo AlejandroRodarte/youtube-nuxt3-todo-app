@@ -4,7 +4,8 @@ import { TodosGetResponse } from './interfaces/todos-get-response.interface';
 import { todosService } from '../../../lib/services/todos/todos.service';
 
 const handler = async (event: H3WithUserContext): Promise<TodosGetResponse> => {
-  await checkUserContext(event);
+  const authError = checkUserContext(event);
+  if (authError) return { data: undefined, error: authError };
 
   const [todos, error] = await todosService.getTodosByOwnerId({
     ownerId: event.context.user!.id,

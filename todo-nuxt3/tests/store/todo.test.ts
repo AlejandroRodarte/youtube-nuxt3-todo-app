@@ -6,6 +6,7 @@ import {
   beforeEach,
   afterEach,
   beforeAll,
+  vi,
 } from 'vitest';
 import { v4 as uuid } from 'uuid';
 
@@ -17,6 +18,10 @@ import {
   TodoUpdate,
 } from '../../src/store/todo/interfaces/todo-actions.interface';
 import { Todo } from '../../src/store/todo/interfaces/todo.interface';
+import { todosService } from '../../src/lib/services/client/todos/todos.service';
+import todosServiceMockImplementations from './helpers/todos-service-mock-implementations.helper';
+import { TodosGetResponse } from '~/lib/services/client/todos/interfaces/todos-get-response.interface';
+import { TodosPatchResponse } from '~/lib/services/client/todos/interfaces/todos-patch-response.interface';
 
 let todoStore: TodoStore;
 
@@ -34,6 +39,12 @@ afterEach(() => {
   todoStore.$reset();
 });
 
+const addTodoPayload: TodoAdd = {
+  newTodo: {
+    title: 'new todo item',
+  },
+};
+
 describe('useTodoStore: general', () => {
   test('Should create a todo store upon calling useTodoStore()', () => {
     const todoStore = useTodoStore();
@@ -48,101 +59,245 @@ describe('useTodoStore: state', () => {
 });
 
 describe('useTodoStore: actions', () => {
-  test('Should add a todo item to the list upon calling addTodo()', () => {
-    const addTodoPayload: TodoAdd = {
-      newTodo: {
-        title: 'New todo item',
-      },
-    };
-    todoStore.addTodo(addTodoPayload);
-
-    expect(todoStore.items.length).toBe(1);
-
-    const [savedTodo] = todoStore.items;
-
-    expect(savedTodo.id).toEqual(expect.any(String));
-    expect(savedTodo.title).toBe(addTodoPayload.newTodo.title);
+  afterEach(() => {
+    vi.resetAllMocks();
   });
 
-  test('Should remove a todo item by its id upon calling deleteTodo()', () => {
-    const addTodoPayload: TodoAdd = {
-      newTodo: {
-        title: 'New todo item',
-      },
-    };
-    todoStore.addTodo(addTodoPayload);
+  describe('getTodos()', async () => {
+    test('Should not do anything if todosService fails', async () => {
+      const spy = vi
+        .spyOn(todosService, 'getTodos')
+        .mockImplementation(todosServiceMockImplementations.error);
 
-    const [{ id: todoId }] = todoStore.items;
-    const deleteTodoPayload: TodoDelete = {
-      selectedTodo: {
-        id: todoId,
-      },
-    };
-    todoStore.deleteTodo(deleteTodoPayload);
+      const error = await todoStore.getTodos();
 
-    expect(todoStore.items.length).toBe(0);
-    const nonexistentTodo = todoStore.getById(todoId);
-    expect(nonexistentTodo).toBeUndefined();
+      expect(spy).toHaveBeenCalled();
+      expect(error!.message).toBe('email must be an email');
+
+      expect(todoStore.items.length).toBe(0);
+    });
+
+    test('Should populate store if todosService succeds', async () => {
+      const spy = vi.spyOn(todosService, 'getTodos').mockImplementation(
+        async (): Promise<[TodosGetResponse['data'], undefined]> => [
+          {
+            todos: [
+              {
+                id: '1',
+                ownerId: '1',
+                label: 'bang stacy',
+                done: false,
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
+              },
+              {
+                id: '2',
+                ownerId: '1',
+                label: 'bang brittany',
+                done: true,
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
+              },
+            ],
+          },
+          undefined,
+        ]
+      );
+
+      const error = await todoStore.getTodos();
+
+      expect(error).toBeUndefined();
+      expect(todoStore.items.length).toBe(2);
+
+      const [todo1, todo2] = todoStore.items;
+
+      expect(todo1.title).toBe('bang stacy');
+      expect(todo2.title).toBe('bang brittany');
+    });
   });
 
-  test('Should update all possible properties in an existing todo item by its id upon calling updateTodo()', () => {
-    const addTodoPayload: TodoAdd = {
-      newTodo: {
-        title: 'Todo item 1',
-      },
-    };
-    todoStore.addTodo(addTodoPayload);
+  describe('addTodo()', async () => {
+    test('Should not add anything to the store and return error message if todosService fails', async () => {
+      const spy = vi
+        .spyOn(todosService, 'addTodo')
+        .mockImplementation(todosServiceMockImplementations.error);
 
-    const [savedTodo] = todoStore.items;
-    expect(savedTodo.done).toBe(false);
+      const error = await todoStore.addTodo(addTodoPayload);
 
-    const updateTodoPayload: TodoUpdate = {
-      selectedTodo: {
-        id: savedTodo.id,
-      },
-      updates: {
-        title: 'New name for my todo',
-        done: true,
-      },
-    };
-    todoStore.updateTodo(updateTodoPayload);
+      expect(spy).toHaveBeenCalledWith({
+        label: addTodoPayload.newTodo.title,
+      });
+      expect(error!.message).toBe('email must be an email');
+      expect(todoStore.items.length).toBe(0);
+    });
 
-    const updatedTodo = todoStore.getById(savedTodo.id);
-    expect(updatedTodo!.title).toBe(updateTodoPayload.updates.title);
-    expect(updatedTodo!.done).toBe(updateTodoPayload.updates.done);
+    test('Should add a todo item to the list upon when todosService succeeds', async () => {
+      const spy = vi
+        .spyOn(todosService, 'addTodo')
+        .mockImplementation(todosServiceMockImplementations.success.addTodo);
+
+      const error = await todoStore.addTodo(addTodoPayload);
+
+      expect(error).toBeUndefined();
+      expect(todoStore.items.length).toBe(1);
+
+      const [savedTodo] = todoStore.items;
+
+      expect(savedTodo.id).toEqual('1');
+      expect(savedTodo.title).toBe(addTodoPayload.newTodo.title);
+    });
   });
 
-  test('Should not update any todo item if id is not found on the list upon calling updateTodo()', () => {
-    const addTodoPayload: TodoAdd = {
-      newTodo: {
-        title: 'Todo item 1',
-      },
-    };
-    todoStore.addTodo(addTodoPayload);
+  describe('deleteTodo()', () => {
+    test('Should not delete anything from the store, and return error message if todosService fails', async () => {
+      const addTodoSpy = vi
+        .spyOn(todosService, 'addTodo')
+        .mockImplementation(todosServiceMockImplementations.success.addTodo);
+      const deleteTodoSpy = vi
+        .spyOn(todosService, 'deleteTodo')
+        .mockImplementation(todosServiceMockImplementations.error);
 
-    const updateTodoPayload: TodoUpdate = {
-      selectedTodo: {
-        id: 'non-existent-todo-item-id',
-      },
-      updates: {
-        done: true,
-      },
-    };
-    todoStore.updateTodo(updateTodoPayload);
+      await todoStore.addTodo(addTodoPayload);
 
-    const [nonUpdatedTodo] = todoStore.items;
-    expect(nonUpdatedTodo.done).not.toBe(true);
+      const [{ id: todoId }] = todoStore.items;
+      const deleteTodoPayload: TodoDelete = {
+        selectedTodo: {
+          id: todoId,
+        },
+      };
+      const error = await todoStore.deleteTodo(deleteTodoPayload);
+
+      expect(deleteTodoSpy).toHaveBeenCalledWith({
+        id: deleteTodoPayload.selectedTodo.id,
+      });
+      expect(error!.message).toBe('email must be an email');
+      expect(todoStore.items.length).toBe(1);
+
+      const [todo1] = todoStore.items;
+
+      expect(todo1.id).toBe('1');
+    });
+
+    test('Should remove a todo item by its id when todosService succeeds', async () => {
+      const addTodoSpy = vi
+        .spyOn(todosService, 'addTodo')
+        .mockImplementation(todosServiceMockImplementations.success.addTodo);
+      const deleteTodoSpy = vi
+        .spyOn(todosService, 'deleteTodo')
+        .mockImplementation(
+          async (): Promise<[undefined, undefined]> => [undefined, undefined]
+        );
+
+      await todoStore.addTodo(addTodoPayload);
+
+      const [{ id: todoId }] = todoStore.items;
+      const deleteTodoPayload: TodoDelete = {
+        selectedTodo: {
+          id: todoId,
+        },
+      };
+      const error = await todoStore.deleteTodo(deleteTodoPayload);
+
+      expect(error).toBeUndefined();
+      expect(todoStore.items.length).toBe(0);
+      const nonexistentTodo = todoStore.getById(todoId);
+      expect(nonexistentTodo).toBeUndefined();
+    });
+  });
+
+  describe('updateTodo()', async () => {
+    test('Should not update todo item in store and return error if todosService fails', async () => {
+      const addTodoSpy = vi
+        .spyOn(todosService, 'addTodo')
+        .mockImplementation(todosServiceMockImplementations.success.addTodo);
+      const updateTodoSpy = vi
+        .spyOn(todosService, 'updateTodo')
+        .mockImplementation(todosServiceMockImplementations.error);
+
+      await todoStore.addTodo(addTodoPayload);
+
+      const [savedTodo] = todoStore.items;
+      expect(savedTodo.done).toBe(false);
+
+      const updateTodoPayload: TodoUpdate = {
+        selectedTodo: {
+          id: savedTodo.id,
+        },
+        updates: {
+          title: 'New name for my todo',
+          done: true,
+        },
+      };
+      const error = await todoStore.updateTodo(updateTodoPayload);
+
+      expect(updateTodoSpy).toHaveBeenCalledWith({
+        id: updateTodoPayload.selectedTodo.id,
+        done: updateTodoPayload.updates.done,
+        label: updateTodoPayload.updates.title,
+      });
+      expect(error!.message).toBe('email must be an email');
+
+      const [nonUpdatedTodo] = todoStore.items;
+
+      expect(nonUpdatedTodo.done).not.toBe(updateTodoPayload.updates.done);
+      expect(nonUpdatedTodo.title).not.toBe(updateTodoPayload.updates.title);
+    });
+
+    test('Should update all possible properties in an existing todo item by its id when todosService succeeds', async () => {
+      const addTodoSpy = vi
+        .spyOn(todosService, 'addTodo')
+        .mockImplementation(todosServiceMockImplementations.success.addTodo);
+      const updateTodoSpy = vi
+        .spyOn(todosService, 'updateTodo')
+        .mockImplementation(
+          async (): Promise<[TodosPatchResponse['data'], undefined]> => [
+            {
+              todo: {
+                id: '1',
+                ownerId: '1',
+                label: 'New name for my todo',
+                done: true,
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
+              },
+            },
+            undefined,
+          ]
+        );
+
+      await todoStore.addTodo(addTodoPayload);
+
+      const [savedTodo] = todoStore.items;
+      expect(savedTodo.done).toBe(false);
+
+      const updateTodoPayload: TodoUpdate = {
+        selectedTodo: {
+          id: savedTodo.id,
+        },
+        updates: {
+          title: 'New name for my todo',
+          done: true,
+        },
+      };
+      const error = await todoStore.updateTodo(updateTodoPayload);
+
+      expect(error).toBeUndefined();
+
+      const updatedTodo = todoStore.getById(savedTodo.id);
+
+      expect(updatedTodo!.title).toBe(updateTodoPayload.updates.title);
+      expect(updatedTodo!.done).toBe(updateTodoPayload.updates.done);
+    });
   });
 });
 
 describe('useTodoStore: getters', () => {
-  test('Should retrieve a todo item by its id upon calling getById()', () => {
-    const addTodoPayload: TodoAdd = {
-      newTodo: {
-        title: 'New todo item',
-      },
-    };
-    todoStore.addTodo(addTodoPayload);
+  test('Should retrieve a todo item by its id upon calling getById()', async () => {
+    const addTodoSpy = vi
+      .spyOn(todosService, 'addTodo')
+      .mockImplementation(todosServiceMockImplementations.success.addTodo);
+
+    await todoStore.addTodo(addTodoPayload);
 
     const [savedTodo] = todoStore.items;
     const retrievedTodo = todoStore.getById(savedTodo.id);
