@@ -36,16 +36,17 @@ import { TodoForm as ITodoForm } from '../components/todo/interfaces/todo-form.i
 import { TodoAdd } from '../store/todo/interfaces/todo-actions.interface';
 import { UpdateEmitPayload } from '../components/todo/interfaces/update-emit-payload.interface';
 
+const router = useRouter();
+
+// non-template-related variables: store, error timeout instances, and initial form values
+const todoStore = useTodoStore();
+
 // before anything else: fetch todos asynchronously; runs always on server
 await useAsyncData('todos', async () => {
   const error = await todoStore.getTodos();
   if (error && error.path === 'auth') navigateTo(error.value);
 });
 
-const router = useRouter();
-
-// non-template-related variables: store, error timeout instances, and initial form values
-const todoStore = useTodoStore();
 let localErrorTimeoutId: NodeJS.Timeout | undefined = undefined;
 let todoFormErrorTimeoutId: NodeJS.Timeout | undefined = undefined;
 const initialTodoFormState: ITodoForm = {
