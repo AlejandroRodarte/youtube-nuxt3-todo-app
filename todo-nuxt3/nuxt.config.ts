@@ -1,3 +1,5 @@
+console.log('nuxt.config.ts running');
+console.log('environment variables', process.env);
 import setDockerSecrets from './src/lib/env/docker/set-docker-secrets.helper';
 
 if (
