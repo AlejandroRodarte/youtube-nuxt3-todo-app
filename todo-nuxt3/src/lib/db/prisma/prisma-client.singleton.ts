@@ -1,17 +1,17 @@
 import Prisma from '@prisma/client';
 
 import { asyncWrapper } from '../../../lib/helpers/wrappers/async.wrapper';
+import entrypointVariables from '../../../lib/env/entrypoint-variables.environment';
 
 class PrismaClient {
   private _client?: Prisma.PrismaClient;
 
   connect(): void {
-    console.log(process.env);
     if (!this._client)
       this._client = new Prisma.PrismaClient({
         datasources: {
           db: {
-            url: process.env.MYSQL_URL!,
+            url: entrypointVariables.mySqlUrl,
           },
         },
       });

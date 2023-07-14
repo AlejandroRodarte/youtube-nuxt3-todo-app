@@ -1,5 +1,3 @@
-import setDockerSecrets from './src/lib/env/docker/set-docker-secrets.helper';
-
 const hmrPort =
   process.env.STAGE === 'development-docker'
     ? +(process.env.HMR_PORT || '3001')
@@ -9,16 +7,6 @@ const hmrPort =
 export default defineNuxtConfig({
   devtools: {
     enabled: true,
-  },
-  hooks: {
-    ready: (nuxt) => {
-      if (
-        ['development-docker', 'production-docker'].includes(
-          process.env.STAGE || ''
-        )
-      )
-        setDockerSecrets();
-    },
   },
   modules: ['@nuxtjs/tailwindcss', '@pinia/nuxt'],
   nitro: {

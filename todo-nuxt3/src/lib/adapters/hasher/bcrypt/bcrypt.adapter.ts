@@ -5,13 +5,14 @@ import { HasherAdapter } from '../interfaces/hasher-adapter.interface';
 import { CompareOptions } from '../interfaces/compare-options.interface';
 import { asyncWrapper } from '../../../../lib/helpers/wrappers/async.wrapper';
 import { DataErrorTuple } from '../../../types/tuples/data-error.tuple.type';
+import entrypointVariables from '../../../../lib/env/entrypoint-variables.environment';
 
 export class BCryptAdapter implements HasherAdapter {
   async hash(options: HashOptions): Promise<DataErrorTuple<string, Error>> {
     const [hashedText, bCryptError] = await asyncWrapper(async () => {
       const hashedText = await hash(
         options.plainText,
-        +process.env.HASHER_ROUNDS!
+        +entrypointVariables.hasherRounds!
       );
       return hashedText;
     });

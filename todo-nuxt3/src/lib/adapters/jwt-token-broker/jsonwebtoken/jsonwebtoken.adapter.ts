@@ -3,9 +3,10 @@ import jwt from 'jsonwebtoken';
 import { JwtTokenBrokerAdapter } from '../interfaces/jwt-token-broker-adapter.interface';
 import { CreateOptions } from '../interfaces/create-options.interface';
 import { CheckOptions } from '../interfaces/check-options.interface';
+import entrypointVariables from '../../../../lib/env/entrypoint-variables.environment';
 
 export class JsonWebTokenAdapter implements JwtTokenBrokerAdapter {
-  private _key = process.env.JWT_KEY!;
+  private _key = entrypointVariables.jwtKey!;
   private _expiresNumber = +process.env.JWT_EXPIRATION_NUMBER!;
   private _expiresPeriod = process.env.JWT_EXPIRATION_PERIOD!;
   private _expiresIn = this.computeExpiresIn();
