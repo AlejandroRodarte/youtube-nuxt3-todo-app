@@ -6,7 +6,7 @@ class PrismaClient {
   private _client?: Prisma.PrismaClient;
 
   connect(): void {
-    console.log('connecting to prisma client');
+    console.log(process.env);
     if (!this._client)
       this._client = new Prisma.PrismaClient({
         datasources: {
