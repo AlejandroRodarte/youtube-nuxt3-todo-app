@@ -103,9 +103,7 @@ LABEL org.opencontainers.image.title "Build image for a simple todo application 
 LABEL com.rodarte.yc.nuxt3.todoapp.stage build
 
 # generate node_modules/.prisma (required for prisma client to work)
-RUN touch /node/prisma/.env \
-    && echo MYSQL_URL=mysql://user@127.0.0.1:3307/nuxt3-todo-db >> /node/prisma/.env \
-    && npx prisma generate
+RUN npx prisma generate
 
 # run nuxt build to generate production-ready server at .output/ dir
 RUN NUXT_PUBLIC_STAGE=APP_NUXT_PUBLIC_STAGE_VAR \
