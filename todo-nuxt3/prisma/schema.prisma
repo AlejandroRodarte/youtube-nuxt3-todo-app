@@ -7,7 +7,7 @@ generator client {
 
 datasource db {
   provider     = "mysql"
-  url          = "mysql://root@127.0.0.1:3306/nuxt3-todo-db"
+  url          = env("MYSQL_URL")
   relationMode = "prisma"
 }
 
