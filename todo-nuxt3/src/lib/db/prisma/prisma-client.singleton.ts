@@ -6,13 +6,12 @@ class PrismaClient {
   private _client?: Prisma.PrismaClient;
 
   connect(): void {
+    console.log('connecting to prisma client');
     if (!this._client)
       this._client = new Prisma.PrismaClient({
         datasources: {
           db: {
-            url:
-              process.env.MYSQL_URL ||
-              'mysql://root@127.0.0.1:3306/nuxt3-todo-db',
+            url: process.env.MYSQL_URL!,
           },
         },
       });
